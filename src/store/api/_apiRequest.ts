@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:2727/api/',
+  baseURL: 'https://home-brew.synology.me:2727/api/',
   timeout: 5000,
 });
 
