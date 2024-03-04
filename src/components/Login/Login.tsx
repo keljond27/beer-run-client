@@ -1,14 +1,36 @@
-/* import React from 'react';
-import { UseDispatch, useSelector } from 'react-redux';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-interface LoginProps {
+import LoginModal from './LoginModal';
 
-}
+import { RootState } from '../../store/store';
 
-const Login = (props: LoginProps) => {
+const Login = () => {
+  
+  const dispatch = useDispatch();
+
+  const loggedInUser = useSelector((state: RootState) => state.users.userData)
+
+  const [ showLoginModal, setShowLoginModal ] = useState(false);
+
+  const handleLoginToggle = () => {
+    setShowLoginModal(!showLoginModal);
+  }
+
   return (
-    <div></div>
+    <>
+    {loggedInUser ? (
+      <>
+      Signed in as:<a href="#login">{loggedInUser.name}</a>
+      </>
+    ) : (
+      <a onClick={handleLoginToggle}>
+      Login?
+      </a>
+    )}
+    <LoginModal showModal={showLoginModal}/>
+    </>
   )
 }
 
-export default Login; */
+export default Login;
