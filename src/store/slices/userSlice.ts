@@ -1,15 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
 
 import { addUser, deleteUserById, getUserById, getUsers, updateUserById } from '../api/users';
+import { User } from '../../types/types';
 
 interface UserState {
   userData: any;
+  loggedIn: User | undefined,
   loading: boolean;
   error: string | null;
 }
 
 const initialState: UserState = {
   userData: undefined,
+  loggedIn: undefined,
   loading: false,
   error: null,
 }
@@ -17,7 +21,11 @@ const initialState: UserState = {
 const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    login(state, action: PayloadAction<User>) {
+      state.loggedIn = action.payload;
+    }
+  },
   extraReducers: (builder) => {
     //getUsers
     builder.addCase(getUsers.pending, (state) =>{
@@ -87,4 +95,5 @@ const userSlice = createSlice({
   }
 });
 
+export const { login } = userSlice.actions;
 export default userSlice.reducer;

@@ -1,29 +1,58 @@
-import { Button, Modal } from 'react-bootstrap';
+import { ReactNode, useState, forwardRef, useImperativeHandle } from 'react';
+import { Modal } from 'react-bootstrap';
+
+
+export interface ModalToggle {
+  onToggle: () => void;
+}
 
 interface BaseModalProps {
-  show: boolean;
+  body: string | ReactNode;
+  footer?: ReactNode | null;
+  handleClose: () => void;
+  size: 'sm' | 'lg' | 'xl' | undefined;
+  theme?: 'dark' | 'light' | undefined;
+  title?: string | ReactNode;
+  ref: React.Ref<ModalToggle>
 }
 
-export const BaseModal = () => {
+const BaseModal = forwardRef<ModalToggle, BaseModalProps>((props, ref) => {
+  const { body, footer, theme, title, size } = props;
+  const { Body, Footer, Header, Title } = Modal;
+
+  
+  const [showModal, setShowModal] = useState(false);
+  
+  const onToggle = () => {
+    setShowModal(!showModal);
+  }
+
+  useImperativeHandle(ref, () => ({ onToggle }), [showModal])
+  
   return (
-    <div
-      className="modal show"
-      style={{ display: 'block', position: 'initial' }}
+    <Modal
+      ref={ref}
+      show={showModal}
+      size={size}
+      aria-labelledby='contained-modal-title-vcenter'
+      centered
+      onHide={onToggle}
+      data-bs-theme={theme}
+      style={{ color: `${theme === 'dark' ? 'rgba(255, 255, 255, 0.55)' : 'rgb(33, 37, 41)'}` }}
     >
-      <Modal.Dialog>
-        <Modal.Header closeButton>
-          <Modal.Title>Modal title</Modal.Title>
-        </Modal.Header>
-
-        <Modal.Body>
-          <p>Modal body text goes here.</p>
-        </Modal.Body>
-
-        <Modal.Footer>
-          <Button variant="secondary">Close</Button>
-          <Button variant="primary">Save changes</Button>
-        </Modal.Footer>
-      </Modal.Dialog>
-    </div>
+      {title ? 
+        <Header closeButton style={{ padding: "5px 10px" }}>
+          <Title><span style={{fontSize: "20px"}} >{title}</span></Title>
+        </Header>
+      : null}
+      <Body>{body}</Body>
+        {footer === null || footer === undefined ? null :
+          <Footer>
+          {footer}
+          </Footer>
+        }
+    </Modal>
   )
-}
+})
+
+export default BaseModal;

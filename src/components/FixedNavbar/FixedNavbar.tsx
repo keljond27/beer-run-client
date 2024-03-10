@@ -1,7 +1,7 @@
 //import { useState } from 'react';
 import { Navbar, Container } from 'react-bootstrap';
 
-import Login from '../Login/Login';
+import Login from '../Login-Logout/LoginLink';
 
 import logo from '../../assets/logo_transparent.png';
 import styles from './FixedNavbar.module.css';
