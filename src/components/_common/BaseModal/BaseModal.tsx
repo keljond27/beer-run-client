@@ -1,6 +1,7 @@
 import { ReactNode, useState, forwardRef, useImperativeHandle } from 'react';
 import { Modal } from 'react-bootstrap';
 
+import styles from './BaseModal.module.css';
 
 export interface ModalToggle {
   onToggle: () => void;
@@ -14,10 +15,11 @@ interface BaseModalProps {
   theme?: 'dark' | 'light' | undefined;
   title?: string | ReactNode;
   ref: React.Ref<ModalToggle>
+  style?: {}
 }
 
 const BaseModal = forwardRef<ModalToggle, BaseModalProps>((props, ref) => {
-  const { body, footer, theme, title, size } = props;
+  const { body, footer, size, style, theme, title } = props;
   const { Body, Footer, Header, Title } = Modal;
 
   
@@ -38,14 +40,14 @@ const BaseModal = forwardRef<ModalToggle, BaseModalProps>((props, ref) => {
       centered
       onHide={onToggle}
       data-bs-theme={theme}
-      style={{ color: `${theme === 'dark' ? 'rgba(255, 255, 255, 0.55)' : 'rgb(33, 37, 41)'}` }}
+      style={{ color: `${theme === 'dark' ? 'rgba(255, 255, 255, 0.55)' : 'rgb(33, 37, 41)'}`}}
     >
       {title ? 
         <Header closeButton style={{ padding: "5px 10px" }}>
           <Title><span style={{fontSize: "20px"}} >{title}</span></Title>
         </Header>
       : null}
-      <Body>{body}</Body>
+      <Body style={{...style}} className={styles.modal_body}>{body}</Body>
         {footer === null || footer === undefined ? null :
           <Footer>
           {footer}
